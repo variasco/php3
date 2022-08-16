@@ -9,10 +9,6 @@ CircleAreaLib) вычисления площади квадрата (getSquareAr
 одной стороны и длины окружности соответственно.
  */
 
-interface asd
-{
-}
-
 interface ISquare
 {
     function squareArea(int $sideSquare);
