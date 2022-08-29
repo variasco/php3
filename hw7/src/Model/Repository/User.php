@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Model\Repository;
 
@@ -8,6 +8,13 @@ use Model\Entity;
 
 class User
 {
+    protected UserIdentityMap $userIdentityMap;
+
+    public function __construct(UserIdentityMap $userIdentityMap)
+    {
+        $this->userIdentityMap = $userIdentityMap;
+    }
+
     /**
      * Получаем пользователя по идентификатору
      *
@@ -16,8 +23,15 @@ class User
      */
     public function getById(int $id): ?Entity\User
     {
+        try {
+            return $this->userIdentityMap->get($id);
+        } catch (\Exception $e) {
+        }
+
         foreach ($this->getDataFromSource(['id' => $id]) as $user) {
-            return $this->createUser($user);
+            $newUser = $this->createUser($user);
+            $this->userIdentityMap->add($newUser);
+            return $newUser;
         }
 
         return null;
